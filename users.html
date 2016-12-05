@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>管理學生</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
+</head>
+<body>
+<nav class="navbar navbar-default" style="border-radius:10px;">
+    <div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+		</button> 
+		<a class="navbar-brand" href="index.html">課指組器管屋(´・ω・`)</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="index.html">回首頁</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">器材教室區<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="equipments.html">器材使用列表</a></li>
+			<li><a href="classroom.html">教室使用列表</a></li>
+          </ul>
+        </li>
+        <li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還器材<span class="caret"></a>
+          <ul class="dropdown-menu">
+            <li><a href="lend.html">我要預借器材</a></li>
+			<li><a href="return.html">我要還器材</a></li>
+          </ul>
+		</li>
+		<li>
+			<a href='notice.html'>違規提醒專區</a>
+		</li>
+      </ul>
+	  				<div class="design">
+					 <a href="http://www.stu.ntou.edu.tw/sc/" target="_blank">國立臺灣海洋大學學生活動中心/課外活動指導組 器材借用網</a> |  <a target="_blank" href="https://www.facebook.com/IMJimmyLin">Web Design by JT</a>
+				</div>
+    </div>
+</nav>
+<div class="container">
+  <p>以下是學生各項資料與狀態: </p>            
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>學生學號</th>
+        <th>學生姓名</th>
+        <th>出借器材</th>
+		<th>已借天數</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+		<td>00357014</td>
+		<td>林俊廷</td>
+		<td>投影機</td>
+		<td>9天</td>
+      </tr>
+      <tr>
+        <td>00357012</td>
+        <td>李俊霖</td>
+        <td>未借器材</td>
+		<td> </td>
+      </tr>
+      <tr>
+        <td>00357034</td>
+        <td>林傳佑</td>
+        <td>未借器材</td>
+		<td> </td>
+      </tr>
+	  <tr>
+		<td>00357041</td>
+		<td>洪語辰</td>
+		<td>VGA線</td>
+		<td>2天</td>
+	  </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
