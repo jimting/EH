@@ -1,7 +1,7 @@
 ﻿<?php session_start(); ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
-include("mysql_connect.inc.php");
+include("mysqli_connect.inc.php");
 
 $id = $_POST['id'];
 $pw = $_POST['pw'];
@@ -16,16 +16,17 @@ $department = $_POST['department'];
 if($id != null && $pw != null && $pw2 != null && $pw == $pw2)
 {
         //新增資料進資料庫語法
-        $sql = "insert into user (user_number, user_pw,user_nickname,user_email,user_department,user_phone) values ('$id','$pw','$nickname','$email', '$department', '$phone')";
-        if(mysql_query($sql))
+		$datetime = date ("Y-m-d H:i:s" , mktime(date('H')+8, date('i'), date('s'), date('m'), date('d'), date('Y'))) ; 
+        $sql = "insert into user (user_number, user_pw,user_nickname,user_email,user_department,user_phone,user_date) values ('$id','$pw','$nickname','$email', '$department', '$phone', '$datetime')";
+        if(mysqli_query($db,$sql))
         {
                 echo '新增成功!';
-                echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
+                echo '<meta http-equiv=REFRESH CONTENT=3;url=login.html>';
         }
         else
         {
                 echo '新增失敗!';
-                echo '<meta http-equiv=REFRESH CONTENT=2;url=register.html>';
+                echo '<meta http-equiv=REFRESH CONTENT=3;url=register.html>';
         }
 }
 else

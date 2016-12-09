@@ -1,7 +1,7 @@
 ﻿<?php session_start(); ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <?php
-include("mysql_connect.inc.php");
+include("mysqli_connect.inc.php");
 
 $id = $_POST['id'];
 $pw = $_POST['pw'];
@@ -18,7 +18,7 @@ if($_SESSION['user_number'] != null && $pw != null && $pw2 != null && $pw == $pw
     
         //更新資料庫資料語法
         $sql = "update user set user_pw='$pw', user_phone='$phone', user_email='$email', user_department='$department', user_nickname='$nickname' where user_number='$id'";
-        if(mysql_query($sql))
+        if(mysqli_query($db,$sql))
         {
                 echo '修改成功!';
                 echo '<meta http-equiv=REFRESH CONTENT=2;url=member.php>';
