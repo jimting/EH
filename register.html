@@ -1,38 +1,29 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>來註冊吧！</title>
+  <title>課指組器管屋(´・ω・`)-來註冊吧！</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="login.css">
 </head>
 <body>
-
-<div class="jumbotron text-center">
-  <h1>課指組器管屋</h1>
-  <p>來註冊吧！</p> 
-</div>
-  
-<div class="container">
-  <div class="row">
-	<form name="form" method="post" action="register_finish.php">
-		學號：<input type="text" name="id" /> <br>
-		密碼：<input type="password" name="pw" /> <br>
-		再一次輸入密碼：<input type="password" name="pw2" /> <br>
-		暱稱：<input type="text" name="nickname"/><br>
-		Email：<input type="text" name="email" /> <br>
-		所屬社團/工作單位：<input type="text" name="department" /> <br>
-		手機/聯絡電話：<input type="text" name="phone" /> <br>
-	<input type="submit" name="button" value="確定" />
-	<br>
-	<a href="login.html" class="btn btn-primary">點我返回上一頁</a>
-	</form>
-  </div>
-</div>
+	<div class="login">
+	   <h1>來註冊吧！</h1>
+	   <form method="post" action="register_finish.php">
+			<input type="text" name="id" placeholder="輸入你的學號" required="required" />
+			<input type="password" name="pw" placeholder="輸入你的密碼" required="required" />
+			<input type="password" name="pw2" placeholder="再輸入一次密碼" required="required" />
+			<input type="text" name="nickname" placeholder="暱稱(會顯示在網頁上哦)" required="required" />
+			<input type="email" name="email" placeholder="Email" required="required" />
+			<input type="text" name="department" placeholder="所屬社團/工作單位" required="required" />
+			<input type="text" name="phone" placeholder="手機/聯絡電話" required="required" />
+			<button type="submit" class="btn btn-primary btn-block btn-large">註冊</button>
+			<a href="login.html" class="WordsToRegister">回登入頁</a>
+	   </form>
+	</div>
 </body>
 </html>
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

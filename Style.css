@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 @font-face
+=======
+ï»¿@font-face
+>>>>>>> refs/remotes/origin/gh-pages
 {
 	font-family:"MyStyle";
 	src: url("./font/001.ttf") format('truetype');
 }
 h1
 {
+<<<<<<< HEAD
 	font-family:MyStyle,"MyStyle",·L³n¥¿¶ÂÅé;
 }
 .footer {
@@ -29,4 +34,26 @@ h1
 }
 .design a {
     color: #444444;
+=======
+	font-family:MyStyle,"MyStyle",å¾®è»Ÿæ­£é»‘é«”;
+}
+.design 
+{
+    color: #444444;
+    line-height: 8px;
+    min-height: 30px;
+    padding: 7px 0;
+	float:right;
+    text-align: right;
+	font-size:8px;
+	width:220px;
+}
+.design a 
+{
+    color: #444444;
+}
+.BigTitle
+{
+	width:100%;
+>>>>>>> refs/remotes/origin/gh-pages
 }
