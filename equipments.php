@@ -9,16 +9,13 @@
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
 	</head>
 	<body>
-	  <p>以下是學生各項資料與狀態: </p>            
+	  <p>以下是器材各項資料與狀態: </p>            
 	  <table class="table table-hover">
 		<thead>
-			<tr>
-				<th>哪個社團</th>
-				<th>暱稱</th>
-				<th>Email</th>
-				<th>連絡電話</th>
-				<th>等級</th>
-				<th>帳號創建日期</th>
+			<tr>			
+				<th>器材編號</th>
+				<th>器材名稱</th>
+				<th>剩餘數量</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -32,12 +29,12 @@
 			if($_SESSION['user_number'] != null)
 			{
 					//將資料庫裡的所有會員資料顯示在畫面上
-					$sql = "SELECT * FROM user";
+					$sql = "SELECT * FROM equipment";
 					if($stmt = $db->query($sql))
 					{
 						while($result=mysqli_fetch_object($stmt))
 						{
-								 echo "<tr><td>".$result->user_department."</td><td>".$result->user_nickname."</td><td>".$result->user_email."</td><td>".$result->user_phone."</td><td>".$result->user_level."</td><td>".$result->user_date."</td></tr>";
+								 echo "<tr><td>".$result->equip_ID."</td><td>".$result->equip_name."</td><td>".$result->equip_quantity."</td></tr>";
 						}
 					}
 					echo "</tbody></table></div></body></html>";
@@ -48,7 +45,7 @@
 					echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
 			}
 			?>
-				  
+		  
 		</tbody>
 	  </table>
 	</body>

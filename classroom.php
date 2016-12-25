@@ -9,16 +9,14 @@
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
 	</head>
 	<body>
-	  <p>以下是學生各項資料與狀態: </p>            
+	  <p>以下是教室各項資料與狀態: </p>            
 	  <table class="table table-hover">
 		<thead>
-			<tr>
-				<th>哪個社團</th>
-				<th>暱稱</th>
-				<th>Email</th>
-				<th>連絡電話</th>
-				<th>等級</th>
-				<th>帳號創建日期</th>
+			<tr>			
+				<th>教室編號</th>
+				<th>教室名稱</th>
+				<th>借出狀態</th>
+				<th>當天使用社團</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -32,12 +30,23 @@
 			if($_SESSION['user_number'] != null)
 			{
 					//將資料庫裡的所有會員資料顯示在畫面上
-					$sql = "SELECT * FROM user";
+					$sql = "SELECT * FROM classroom";
 					if($stmt = $db->query($sql))
 					{
 						while($result=mysqli_fetch_object($stmt))
 						{
-								 echo "<tr><td>".$result->user_department."</td><td>".$result->user_nickname."</td><td>".$result->user_email."</td><td>".$result->user_phone."</td><td>".$result->user_level."</td><td>".$result->user_date."</td></tr>";
+								 echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td><td>";
+								 if($result->room_status == 0)
+								 {
+									echo "未借出</td></tr>";
+								 }
+								 else
+								 {
+									$temp = $result->room_ID;
+									$query = "SELECT * FROM lend_room NATURAL JOIN user WHERE room_ID = '$temp'";
+									$result2 = mysqli_fetch_object($db->query($query));
+									echo "已借出</td><td>".$result2->user_department."</td></tr>";
+								 }
 						}
 					}
 					echo "</tbody></table></div></body></html>";
@@ -48,7 +57,7 @@
 					echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
 			}
 			?>
-				  
+		  
 		</tbody>
 	  </table>
 	</body>
