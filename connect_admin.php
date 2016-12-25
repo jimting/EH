@@ -29,11 +29,11 @@ if($result != null && $result->user_number == $id && $result->user_pw == $pw && 
 		
 		//user_number, user_pw,user_nickname,user_email,user_department,user_phone,user_date
         echo '<div class="login"><h1>登入成功囉！<h1><br><h1>前進首頁！</h1></div>';
-        echo '<meta http-equiv=REFRESH CONTENT=3;url=teacher.html>';
+        echo '<meta http-equiv=REFRESH CONTENT=3;url=./teacher/index.html>';
 }
 else
 {
-		echo '<div class="login"><h1>登入失敗！<h1><br><h1>請確定帳密是否正確</h1><br><h1>轉跳到登入頁面！</h1></div>';
+		echo '<div class="login"><h1>登入失敗！<h1><br><h1>請確定帳密是否正確</h1><br><h1>或是你是否有管理權限</h1><br><h1>轉跳到登入頁面！</h1></div>';
         echo '<meta http-equiv=REFRESH CONTENT=3;url=admin.html>';
 }
 ?>
