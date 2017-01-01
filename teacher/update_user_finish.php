@@ -20,18 +20,16 @@ if($_SESSION['user_number'] != null && $pw != null && $pw2 != null && $pw == $pw
         $sql = "update user set user_pw='$pw', user_phone='$phone', user_email='$email', user_department='$department', user_nickname='$nickname' where user_number='$id'";
         if(mysqli_query($db,$sql))
         {
-                echo '修改成功!';
-                echo '<meta http-equiv=REFRESH CONTENT=2;url=member.php>';
+                echo '<meta http-equiv=REFRESH CONTENT=0;url=users.php>';
         }
         else
         {
-                echo '修改失敗!';
-                echo '<meta http-equiv=REFRESH CONTENT=2;url=member.php>';
+                echo '<meta http-equiv=REFRESH CONTENT=0;url=users.php>';
         }
 }
 else
 {
         echo '您無權限觀看此頁面!';
-        echo '<meta http-equiv=REFRESH CONTENT=2;url=member.php>';
+        echo '<meta http-equiv=REFRESH CONTENT=2;url=../login.html>';
 }
 ?>

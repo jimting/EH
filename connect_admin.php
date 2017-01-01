@@ -26,6 +26,7 @@ if($result != null && $result->user_number == $id && $result->user_pw == $pw && 
 		$_SESSION['user_department'] = $result->user_department;
 		$_SESSION['user_date'] = $result->user_date;
 		$_SESSION['user_ID'] = $result->user_ID;
+		$_SESSION['user_level'] = $result->user_level;
 		
 		//user_number, user_pw,user_nickname,user_email,user_department,user_phone,user_date
         echo '<div class="login"><h1>登入成功囉！<h1><br><h1>前進首頁！</h1></div>';

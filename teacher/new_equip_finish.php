@@ -1,12 +1,14 @@
 <?php
 include "mysqli_connect.inc.php";
-$equip_ID	=	$_GET["id"];
+$equip_name      =$_POST["equip_name"];
+$equip_quantity  =$_POST["equip_quantity"];
+$equip_date      =$_POST["equip_date"];
 
-//$query = ("Delete FROM equipment WHERE equip_ID=?");
-$stmt = $db->prepare("Delete FROM equipment WHERE equip_ID='$equip_ID'");
-$stmt->bind_param('i',$equip_ID);
+$query = ("insert into t1 value(?,?,?)");
+$stmt = $db->prepare($query);
+$stmt->bind_param('isis',$equip_name,$equip_quantity,$equip_date);
 $stmt->execute();
-
+var_dump(param_name);
 
 echo "<table border='1'>
 <tr>
