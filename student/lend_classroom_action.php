@@ -1,44 +1,38 @@
 ﻿<?php session_start(); ?>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link rel="stylesheet" href="../css/bootstrap.min.css">
-		<script src="../js/jquery.js"></script>
-		<script src="../js/bootstrap.js"></script>
-	</head>
-	<body>
-		<?php
-		include("mysqli_connect.inc.php");
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+include("mysqli_connect.inc.php");
 
-		$room_ID = $_POST['classroom'];
-		$user_ID = $_SESSION['user_ID'];
+$lend_date = $_POST['startdays'];
+$room_ID = $_POST['classroom'];
+$lend_time = $_POST['time'];//預借時段
+$user_ID = $_SESSION['user_ID'];
 
-		if($user_ID != null && $room_ID != null)
+if($lend_date != null && $room_ID != null && $lend_time != null && $user_ID != null && $room_ID != null)
+{
+    $sql_check = "SELECT * FROM lend_room WHERE lend_date ='$lend_date' AND room_ID ='$room_ID' AND lend_time = '$lend_time'";
+	if($stmt = $db->query($sql_check))
+	{
+		if($result=mysqli_fetch_object($stmt))
 		{
-				//新增資料進資料庫語法
-				$datetime = date ("Y-m-d H:i:s" , mktime(date('H')+8, date('i'), date('s'), date('m'), date('d'), date('Y'))) ; 
-				$sql = "insert into lend_room (user_ID,room_ID,lend_date) values ('$user_ID','$room_ID','$datetime')";
-				if(mysqli_query($db,$sql))
-				{
-					$sql2 = "update classroom set room_status = 1 where room_ID = '$room_ID'";
-					if(mysqli_query($db,$sql2))
-					{
-						echo '借用教室成功!';
-					}
-					else
-					{
-						echo '借用教室失敗1!';
-					}				
-				}
-				else
-				{
-						echo '借用教室失敗2!';
-				}
+			echo '該時段無法預借';
 		}
 		else
 		{
-				echo '您無權限觀看此頁面!';
+			$sql = "insert into lend_room (user_ID,room_ID,lend_date,lend_time) values ('$user_ID','$room_ID','$lend_date','$lend_time')";
+			if(mysqli_query($db,$sql))
+			{
+				echo '借用教室成功!';
+			}
+			else
+			{
+				echo '借用教室失敗!';
+			}
 		}
-		?>
-	</body>
-</html>
+	}
+}
+else
+{
+    echo '您無權限觀看此頁面!';
+}
+?>

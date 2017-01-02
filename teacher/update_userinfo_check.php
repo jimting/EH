@@ -48,37 +48,16 @@
 		</nav>
 	</head>
 	<body>
-		<div class="container">       
-			<table class="table table-hover">
-				<?php
-					include("mysqli_connect.inc.php");
-					$user_ID = $_SESSION['user_ID'];
-					$user_name = $_SESSION['user_nickname'];
-					echo '<h1><strong>'.$user_name.'</strong>您好！以下是你的個人資料！<a class="button" href="update_userinfo_check.php">點我編輯個人資訊</a></h1>';
-					echo '<tr><td>你的學號：</td><td>'.$_SESSION['user_number'].'</td></tr><tr><td>你的暱稱：</td><td>'.$_SESSION['user_nickname'].'</td></tr><tr><td>你隸屬的社團：</td><td>'.$_SESSION['user_department'].'</td></tr><tr><td>帳號創建日期：</td><td>'.$_SESSION['user_date'].'</td></tr>';
-					
-					$sql = "SELECT * FROM equipment AS A1, lend_equip AS A2 WHERE A1.equip_ID = A2.equip_ID AND A2.user_ID = '$user_ID'";
-					if($stmt = $db->query($sql))
-					{
-						if($result=mysqli_fetch_object($stmt))
-						echo '<tr><td><h1>以下是尚未歸還之器材</h1></td></tr>';
-						while($result=mysqli_fetch_object($stmt))
-						{
-							echo '<tr><td>'.$result->equip_name.'</td><td>預借日期'.$result->lend_date.'，借'.$result->lend_days.'天</td></tr>';
-						}
-					}
-					$sql = "SELECT * FROM classroom AS A1, lend_room AS A2 WHERE A1.room_ID = A2.room_ID AND A2.user_ID = '$user_ID'";
-					if($stmt = $db->query($sql))
-					{
-						if($result2=mysqli_fetch_object($stmt))
-						echo '<tr><td><h1>以下是尚未歸還之教室</h1></td></tr>';
-						while($result2=mysqli_fetch_object($stmt))
-						{
-							echo '<tr><td>'.$result2->room_name.'</td><td>預借日期'.$result2->lend_date.'</td></tr>';
-						}
-					}
-				?>
-			</table>
+		<div class="container">
+			<?php
+				include("mysqli_connect.inc.php");
+				$user_ID = $_SESSION['user_ID'];
+				echo '<h1>為了確認是不是本人<br>請再次輸入你的密碼以順利修改資訊</h1>';
+				echo '<form name="form" method="post" action="update_userinfo.php">';
+				echo '<input type="password" name="CheckPassword" /> <br>';
+				echo '<button type="submit" class="button" name="button">確認密碼</button> <button type="reset" class="button" name="button">清除重填</button>';
+				echo '</form>';
+			?>
 		</div>
 	</body>
 </html>

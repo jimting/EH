@@ -69,7 +69,7 @@
 						session_start();
 						include("mysqli_connect.inc.php");
 						$user_ID = $_SESSION['user_ID'];//使用者
-
+						$lend_equip_ID = $_GET['lend_equip_ID'];
 						$sql3 = "SELECT * FROM lend_equip WHERE user_ID = '$user_ID'"; //使用者所有借據
 						$stmt = $db->query($sql3);
 						$result3=mysqli_fetch_object($stmt);
