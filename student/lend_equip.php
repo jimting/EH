@@ -36,12 +36,6 @@
 							<li><a href="classroom.php">教室使用列表</a></li>
 						</ul>
 					</li>
-					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還器材<span class="caret"></a>
-						<ul class="dropdown-menu">
-							<li><a href="lend_equip.php">我要預借器材</a></li>
-							<li><a href="return_equip.php">我要還器材</a></li>
-						</ul>
-					</li>
 					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還教室<span class="caret"></a>
 						<ul class="dropdown-menu">
 							<li><a href="lend_room.php">我要預借教室</a></li>
@@ -72,6 +66,7 @@
 		?>
 		<script>
 			var equip_ID = <?php echo $equip_ID;?>;
+			var max = 0;
 			toastr.options = {
 				positionClass: 'toast-bottom-right',
 			}
@@ -79,17 +74,24 @@
 			{
 				$("#ajaxbutton").click(function()
 				{
-					$.post("lend_equip_finish.php",
+					if($('#howmany').val() <= max && $('#days').val() <= 7)
 					{
-					  equip_ID:		equip_ID,
-					  howmany:		$('#howmany').val(),
-					  startdays:	$('#datepicker').val(),
-					  days:			$('#days').val()
-					},
-					function(result){
-						toastr.info('<strong>預借成功啦！</strong><br>可以到個人資訊確認<br>轉跳到器材清單！');
-						setTimeout("location.href='equipments.php'",3000);
-					});
+						$.post("lend_equip_finish.php",
+						{
+						  equip_ID:		equip_ID,
+						  howmany:		$('#howmany').val(),
+						  startdays:	$('#datepicker').val(),
+						  days:			$('#days').val()
+						},
+						function(result){
+							toastr.success('<strong>預借成功啦！</strong><br>可以到個人資訊確認<br>轉跳到器材清單！');
+							setTimeout("location.href='equipments.php'",2000);
+						});
+					}
+					else
+					{
+						toastr.warning('<strong>數量有誤！</strong><br>請再次確認預借數量與天數<br>不可超過指定數值！');
+					}
 				});
 			});
 			
@@ -98,8 +100,6 @@
 	<body>
 		<div class="container">
 			<div class="form-group">
-				<label for="equip">選擇器材:</label>
-				  
 					<?php
 						if($_SESSION['user_number'] != null)
 						{
@@ -110,12 +110,13 @@
 							echo "<h1>".$result->equip_name."剩下".$result->equip_quantity."個</h1>";
 							$max = $result->equip_quantity; //剩下多少個
 							echo '
-							<input type="number" class="form-control" id="howmany" placeholder="要借幾個" max = "'.$max.'" min = "0" />
+							<input type="number" class="form-control" id="howmany" placeholder="要借幾個" max = "'.$max.'" min = "0" required="required"/>
 							<label for="equip">欲借日期:</label>
-							<input class="form-control" name="startdays" id="datepicker" placeholder="輸入日期">
+							<input class="form-control" name="startdays" id="datepicker" placeholder="輸入日期" required="required">
 							<label for="equip">欲借天數:</label>
-							<input type="text" class="form-control" id="days" placeholder="輸入天數">';
+							<input type="number" class="form-control" id="days" placeholder="輸入天數(最多借7天)" max = "7" required="required">';
 						}
+						echo "<script>max = ".$max.";</script>";
 					}	
 					else
 					{

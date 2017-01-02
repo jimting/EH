@@ -8,7 +8,36 @@
 		<script src="../js/jquery.js"></script>
 		<script src="../js/bootstrap.js"></script>
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
-		<script src="Phone.js"></script>
+		<link rel="stylesheet" href="toastr.css" type="text/css" media="screen" />
+		<script src="./toastr.js"></script>
+		
+		<?php
+			session_start();
+			include("mysqli_connect.inc.php");
+			$user_ID = $_SESSION['user_ID'];//使用者
+			$lend_equip_ID = $_GET['lend_equip_ID'];
+		?>
+		<script>
+			var lend_equip_ID = <?php echo $lend_equip_ID; ?>;
+			toastr.options = {
+				positionClass: 'toast-bottom-right',
+			}
+			$(document).ready(function()
+			{
+				$("#returnbutton").click(function()
+				{
+					$.post("return_equip_finish.php",
+					{
+					  lend_equip_ID: lend_equip_ID
+					},
+					function(result)
+					{
+						toastr.success('<strong>歸還成功啦！</strong><br>可以到個人資訊確認<br>轉跳到個人資訊！');
+						setTimeout("location.href='userinfo.php'",2000);
+					});
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<img src="./image/BigTitle.jpg" class="BigTitle" />
@@ -30,12 +59,6 @@
 						<ul class="dropdown-menu">
 							<li><a href="equipments.php">器材使用列表</a></li>
 							<li><a href="classroom.php">教室使用列表</a></li>
-						</ul>
-					</li>
-					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還器材<span class="caret"></a>
-						<ul class="dropdown-menu">
-							<li><a href="lend_equip.php">我要預借器材</a></li>
-							<li><a href="return_equip.php">我要還器材</a></li>
 						</ul>
 					</li>
 					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還教室<span class="caret"></a>
@@ -61,44 +84,19 @@
 			</div>
 		</nav>
 		<div class="container">
-			<form method="post" action = "return_equip_finish.php">
-				<div class="form-group">
-					<label for="equip">選擇器材:</label>
-					<select name="lend_equip_ID">
-					<?php
-						session_start();
-						include("mysqli_connect.inc.php");
-						$user_ID = $_SESSION['user_ID'];//使用者
-						$lend_equip_ID = $_GET['lend_equip_ID'];
-						$sql3 = "SELECT * FROM lend_equip WHERE user_ID = '$user_ID'"; //使用者所有借據
-						$stmt = $db->query($sql3);
-						$result3=mysqli_fetch_object($stmt);
-
-						if($_SESSION['user_number'] != null)
-							{
-								$sql = "SELECT * FROM equipment,lend_equip WHERE equipment.equip_ID = lend_equip.equip_ID && lend_equip.user_ID = '$user_ID'";
-								//$sql = "SELECT equipment.equip_name,lend_equip.equip_ID,lend_equip.lend_equip_quan,lend_equip.lend_equip_ID FROM equipment, lend_equip WHERE lend_equip.equip_ID = equipment.equip_ID && user_ID = '$user_ID'";
-								if($stmt = $db->query($sql))
-								{
-									while($result=mysqli_fetch_object($stmt))
-									{
-											echo "<option value=".$result->lend_equip_ID.">".$result->equip_name."歸還".$result->lend_equip_quan."個</option>";
-																
-									}
-
-								}
-							}	
-							else
-							{
-								echo '你還沒登入';
-								echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
-							}
-						
-					?>
-					</select><br>
-				</div>
-				<button type="submit" class="btn btn-default">確認</button>
-			</form>
+			<div class="form-group">
+				<?php
+					$sql = "SELECT * FROM equipment AS A1, lend_equip AS A2 WHERE A1.equip_ID = A2.equip_ID AND A2.lend_equip_ID = '$lend_equip_ID'";
+					if($stmt = $db->query($sql))
+					{
+						while($result=mysqli_fetch_object($stmt))
+						{
+							echo "<h1>歸還<strong>".$result->equip_name."</strong>，借了".$result->lend_equip_quan."個</h1>";
+						}
+					}
+				?>
+				<a id='returnbutton' class='btn btn-lg btn-default'>確定歸還</a>
+			</div>
 		</div>
 	</body>
 </html>

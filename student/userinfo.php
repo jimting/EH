@@ -30,12 +30,6 @@
 							<li><a href="classroom.php">教室使用列表</a></li>
 						</ul>
 					</li>
-					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還器材<span class="caret"></a>
-						<ul class="dropdown-menu">
-							<li><a href="lend_equip.php">我要預借器材</a></li>
-							<li><a href="return_equip.php">我要還器材</a></li>
-						</ul>
-					</li>
 					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還教室<span class="caret"></a>
 						<ul class="dropdown-menu">
 							<li><a href="lend_room.php">我要預借教室</a></li>
@@ -76,7 +70,7 @@
 						echo '<tr><td><h1>以下是尚未歸還之器材</h1></td></tr>';
 						while($result=mysqli_fetch_object($stmt))
 						{
-							echo '<tr><td>'.$result->equip_name.'</td><td>預借日期'.$result->lend_date.'，借'.$result->lend_days.'天</td></tr>';
+							echo '<tr><td>'.$result->equip_name.'</td><td>預借日期'.$result->lend_date.'，借'.$result->lend_days.'天</td><td><a href="return_equip_check.php?lend_equip_ID='.$result->lend_equip_ID.'" class="btn btn-lg btn-default">歸還器材</a></td></tr>';
 						}
 					}
 					$sql = "SELECT * FROM classroom AS A1, lend_room AS A2 WHERE A1.room_ID = A2.room_ID AND A2.user_ID = '$user_ID'";
