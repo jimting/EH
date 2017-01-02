@@ -54,7 +54,7 @@
 			</div>
 		</nav>
 	<div class="container">
-	  <p>以下是出借天數超過七天的器材資料: </p>            
+	  <p>以下是出借天數超過七天的器材資料:(若為空白代表沒有人違規) </p>            
 	  <table class="table table-hover">
 		<thead>
 		  <tr>
@@ -79,6 +79,7 @@
 					{	
 						$days = (strtotime($today) - strtotime($result->lend_date))/ 86400;
 						if($days > $result->lend_days)
+						{
 							echo "<tr>";
 							echo "<td>".$result->equip_ID."</td>";
 							echo "<td>".$result->equip_name."</td>";
@@ -86,7 +87,8 @@
 							echo "<td>".$result->lend_days."</td>";
 							echo "<td>".$days."</td>";
 							echo "<td>".$result->user_ID."</td>";
-							echo "</tr>";				
+							echo "</tr>";		
+						}							
 					}
 				}
 			?>
