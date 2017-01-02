@@ -1,5 +1,4 @@
-﻿<?php session_start(); ?>
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<title>課指組器管屋(´・ω・`)-器材使用列表</title>
@@ -9,6 +8,35 @@
 		<script src="../js/jquery.js"></script>
 		<script src="../js/bootstrap.js"></script>
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="toastr.css" type="text/css" media="screen" />
+		<script src="./toastr.js"></script>
+		
+		<?php
+			session_start();
+			include("mysqli_connect.inc.php");
+			$equip_ID = $_GET['equip_ID'];
+		?>
+		<script>
+			var equip_ID = <?php echo $equip_ID; ?>;
+			toastr.options = {
+				positionClass: 'toast-bottom-right',
+			}
+			$(document).ready(function()
+			{
+				$("#deletebutton").click(function()
+				{
+					$.post("delete_equip_finish.php",
+					{
+					  equip_ID: equip_ID
+					},
+					function(result)
+					{
+						toastr.success('<strong>刪除器材成功啦！</strong><br>同時將有此器材的借據全數刪除<br>可以到器材總表確認<br>轉跳到器材總表！');
+						setTimeout("location.href='equipments.php'",2000);
+					});
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<img src="./image/BigTitle.jpg" class="BigTitle" />
@@ -19,7 +47,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>                        
 				</button> 
-				<a class="navbar-brand" href="index.html">課指組器管屋(´・ω・`)</a>
+				<a class="navbar-brand" href="index.html">課指組器管屋(’?ω?`)</a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
@@ -49,46 +77,20 @@
 			</div>
 		</nav>
 		<div class="container">
-			<p>以下是器材各項資料與狀態: </p>            
-			<table class="table table-hover">
-				<thead>
-					<tr>			
-						<th>器材編號</th>
-						<th>器材名稱</th>
-						<th>總共數量</th>
-						<th>剩餘數量</th>
-						<th><a href="new_equip.html" class="btn btn-lg btn-default">新增器材</a></th>
-					</tr>
-				</thead>
-				<tbody>
-				
-					<?php
-					include("mysqli_connect.inc.php");
-
-					//此判斷為判定觀看此頁有沒有權限
-					//說不定是路人或不相關的使用者
-					//因此要給予排除
-					if($_SESSION['user_number'] != null)
+			<div class="form-group">
+				<?php
+				include "mysqli_connect.inc.php";
+				$sql = "SELECT * FROM equipment WHERE equip_ID = '$equip_ID'";
+				if($stmt = $db->query($sql))
+				{
+					while($result = mysqli_fetch_object($stmt))
 					{
-							//將資料庫裡的所有會員資料顯示在畫面上
-							$sql = "SELECT * FROM equipment";
-							if($stmt = $db->query($sql))
-							{
-								while($result=mysqli_fetch_object($stmt))
-								{
-										 echo "<tr><td>".$result->equip_ID."</td><td>".$result->equip_name."</td><td>".$result->equip_total."</td><td>".$result->equip_quantity."</td><td><a href='delete_equip_check.php?equip_ID=".$result->equip_ID."' class='btn btn-lg btn-default'>刪除器材</a><a href='update_equip.php?equip_ID=".$result->equip_ID."' class='btn btn-lg btn-default'>編輯器材</a></td></tr>";
-								}
-							}
+						echo "<h1>目前要刪除器材，<strong>".$result->equip_name."</strong>總共".$result->equip_total."個</h1>";
 					}
-					else
-					{
-							echo '您無權限觀看此頁面!';
-							echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
-					}
-					?>
-				  
-				</tbody>
-			</table>
+				}
+				?>
+				<a id='deletebutton' class='btn btn-lg btn-default'>確定刪除</a>
+			</div>
 		</div>
 	</body>
 </html>

@@ -8,8 +8,8 @@
 		<link rel="stylesheet" href="../css/bootstrap.min.css">
 		<script src="../js/jquery.js"></script>
 		<script src="../js/bootstrap.js"></script>
-		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
-		<img src="./image/BigTitle.jpg" class="BigTitle" />
+		<link rel="stylesheet" href="Style.css" type="text/css" media="screen"/>
+		<img src="./image/BigTitle.jpg" class="BigTitle"/>
 		<nav class="navbar navbar-default" style="border-radius:10px;">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -49,14 +49,15 @@
 	</head>
 	<body>
 		<div class="container">
-			<p>以下是教室各項資料與狀態: </p>            
+			<p>以下是教室各項資料與狀態: </p>        
 			<table class="table table-hover">
 				<thead>
 					<tr>			
 						<th>教室編號</th>
 						<th>教室名稱</th>
-						<th>借出狀態</th>
-						<th>當天使用社團</th>
+						<th>現在借出狀態</th>
+						<th>現在使用社團</th>
+						<th><a href="new_classroom.html" class="btn btn-lg btn-default">新增教室</a></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -78,18 +79,19 @@
 										 echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td><td>";
 										 if($result->room_status == 0)
 										 {
-											echo "未借出</td></tr>";
+											echo "未借出</td><td></td>";
 										 }
 										 else
 										 {
 											$temp = $result->room_ID;
 											$query = "SELECT * FROM lend_room NATURAL JOIN user WHERE room_ID = '$temp'";
 											$result2 = mysqli_fetch_object($db->query($query));
-											echo "已借出</td><td>".$result2->user_department."</td></tr>";
+											echo "已借出</td><td>".$result2->user_department."</td>";
 										 }
+										 echo '<td><a href="update_classroom.html" class="btn btn-lg btn-default">編輯教室</a>
+										 <a href="update_classroom.html" class="btn btn-lg btn-default">刪除教室</a></td></tr>';
 								}
 							}
-							echo "</tbody></table></div></body></html>";
 					}
 					else
 					{

@@ -31,10 +31,10 @@
 							<li><a href="classroom.php">教室使用列表</a></li>
 						</ul>
 					</li>
-					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還器材<span class="caret"></a>
+					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還教室<span class="caret"></a>
 						<ul class="dropdown-menu">
-							<li><a href="lend_equip.php">我要預借器材</a></li>
-							<li><a href="return_equip.php">我要還器材</a></li>
+							<li><a href="lend_room.php">我要預借教室</a></li>
+							<li><a href="return_room.php">我要還器教室</a></li>
 						</ul>
 					</li>
 					<li class="active">
@@ -54,7 +54,7 @@
 			</div>
 		</nav>
 	<div class="container">
-	  <p>以下是出借天數超過七天的器材資料: </p>            
+	  <p>以下是出借天數超過七天的器材資料:(若為空白代表沒有人違規) </p>            
 	  <table class="table table-hover">
 		<thead>
 		  <tr>
@@ -79,6 +79,7 @@
 					{	
 						$days = (strtotime($today) - strtotime($result->lend_date))/ 86400;
 						if($days > $result->lend_days)
+						{
 							echo "<tr>";
 							echo "<td>".$result->equip_ID."</td>";
 							echo "<td>".$result->equip_name."</td>";
@@ -86,7 +87,8 @@
 							echo "<td>".$result->lend_days."</td>";
 							echo "<td>".$days."</td>";
 							echo "<td>".$result->user_ID."</td>";
-							echo "</tr>";				
+							echo "</tr>";		
+						}							
 					}
 				}
 			?>
