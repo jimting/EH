@@ -37,6 +37,15 @@
 							<li><a href="return_equip.php">我要還器材</a></li>
 						</ul>
 					</li>
+<<<<<<< HEAD
+					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還教室<span class="caret"></a>
+						<ul class="dropdown-menu">
+							<li><a href="lend_room.php">我要預借教室</a></li>
+							<li><a href="return_room.php">我要還器教室</a></li>
+						</ul>
+					</li>
+=======
+>>>>>>> refs/remotes/origin/gh-pages
 					<li class="active">
 						<a href='notice.php'>違規提醒專區</a>
 					</li>
