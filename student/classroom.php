@@ -54,14 +54,17 @@
 		</div>
 	</nav>
 	<div class="container">
-		<p>以下是教室各項資料與狀態: </p>            
+		<p>以下是教室今日使用狀態：</p>            
 	  <table class="table table-hover">
 		<thead>
 			<tr>			
 				<th>教室編號</th>
 				<th>教室名稱</th>
-				<th>現在借出狀態</th>
-				<th>現在使用社團</th>
+				<th>09:00~11:00</th>
+				<th>11:00~13:00</th>
+				<th>13:00~15:00</th>
+				<th>15:00~17:00</th>
+				<th> </th>
 			</tr>
 		</thead>
 		<tbody>
@@ -70,32 +73,38 @@
 				session_start();
 				include("mysqli_connect.inc.php");
 
-				//此判斷為判定觀看此頁有沒有權限
-				//說不定是路人或不相關的使用者
-				//因此要給予排除
 				if($_SESSION['user_number'] != null)
 				{
-						//將資料庫裡的所有會員資料顯示在畫面上
-						$sql = "SELECT * FROM classroom";
-						if($stmt = $db->query($sql))
+					$datetime = date ("Y-m-d" , mktime(date('m'), date('d'), date('Y'))) ; //取得今日時間
+					$sql = "SELECT * FROM classroom";
+					if($stmt = $db->query($sql))
+					{
+						while($result=mysqli_fetch_object($stmt))
 						{
-							while($result=mysqli_fetch_object($stmt))
-							{
-									 echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td><td>";
-									 if($result->room_status == 0)
-									 {
-										echo "未借出</td></tr>";
-									 }
-									 else
-									 {
-										$temp = $result->room_ID;
-										$query = "SELECT * FROM lend_room NATURAL JOIN user WHERE room_ID = '$temp'";
-										$result2 = mysqli_fetch_object($db->query($query));
-										echo "已借出</td><td>".$result2->user_department."</td></tr>";
-									 }
-							}
+								echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td>";
+								for($i = 0;$i < 4;$i++)
+								{
+									$sql2 = "SELECT * WHERE lend_time = '$i' IN(SELECT * FROM lend_room AS A,user AS B WHERE A.user_ID = B.user_ID AND A.room_ID = '$result->room_ID' AND lend_date = '$datetime')";
+									if(mysqli_query($db, $sql2) != null){
+										if($stmt2 = $db->query($sql2))
+										{
+											if($result2 = mysqli_fetch_object($stmt2))
+											{
+												echo "<td>".$result2->user_department."</td>";
+											}
+												
+										}
+									}
+									else
+									{
+										echo "<td>未借出</td>";
+									}
+								}
+								echo "<td><a href='lend_room_checkdate.php?room_ID=".$result->room_ID."' class='btn btn-lg btn-default'>我想預借</a></td>";
+								echo "</tr>";
+									 
 						}
-						echo "</tbody></table></div></body></html>";
+					}
 				}
 				else
 				{
