@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿<?php session_start(); ?>
+<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<title>課指組器管屋(´・ω・`)</title>
@@ -8,23 +9,19 @@
 		<script src="../js/jquery.js"></script>
 		<script src="../js/bootstrap.js"></script>
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
-		<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-		<script src="Phone.js"></script>
-	</head>
-	<body>
 		<img src="./image/BigTitle.jpg" class="BigTitle" />
 		<nav class="navbar navbar-default" style="border-radius:10px;">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>                        
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>                        
 				</button> 
 				<a class="navbar-brand" href="index.html">課指組器管屋(´・ω・`)</a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="index.html">回首頁</a></li>
+					<li><a href="index.html">回首頁</a></li>
 					<li><a href="users.php">學生總表</a></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">器材教室區<span class="caret"></span></a>
@@ -61,47 +58,36 @@
 				</div>
 			</div>
 		</nav>
-		<div class="container">
-			<h1>您好！以下是你的個人資料！</h1>            
+	</head>
+	<body>
+		<div class="container">       
 			<table class="table table-hover">
 				<?php
-					session_start();
 					include("mysqli_connect.inc.php");
-					$temp = $_SESSION['user_ID'];
-					//此判斷為判定觀看此頁有沒有權限
-					//說不定是路人或不相關的使用者
-					//因此要給予排除
-					if($_SESSION['user_number'] != null)
+					$user_ID = $_SESSION['user_ID'];
+					$user_name = $_SESSION['user_nickname'];
+					echo '<h1><strong>'.$user_name.'</strong>您好！以下是你的個人資料！<a class="button" href="update_userinfo_check.php">點我編輯個人資訊</a></h1>';
+					echo '<tr><td>你的學號：</td><td>'.$_SESSION['user_number'].'</td></tr><tr><td>你的暱稱：</td><td>'.$_SESSION['user_nickname'].'</td></tr><tr><td>你隸屬的社團：</td><td>'.$_SESSION['user_department'].'</td></tr><tr><td>帳號創建日期：</td><td>'.$_SESSION['user_date'].'</td></tr>';
+					
+					$sql = "SELECT * FROM equipment AS A1, lend_equip AS A2 WHERE A1.equip_ID = A2.equip_ID AND A2.user_ID = '$user_ID'";
+					if($stmt = $db->query($sql))
 					{
-						
-						echo '<tr><td>你的學號：</td><td>'.$_SESSION['user_number'].'</td></tr><tr><td>你的暱稱：</td><td>'.$_SESSION['user_nickname'].'</td></tr><tr><td>你隸屬的社團：</td><td>'.$_SESSION['user_department'].'</td></tr><tr><td>帳號創建日期：</td><td>'.$_SESSION['user_date'].'</td></tr>';
-						$sql = "SELECT *
-							FROM equipment AS A1, lend_equip AS A2
-							WHERE A1.equip_ID = A2.equip_ID AND A2.user_ID = '$temp'";
-						if($stmt = $db->query($sql))
+						if($result=mysqli_fetch_object($stmt))
+						echo '<tr><td><h1>以下是尚未歸還之器材</h1></td></tr>';
+						while($result=mysqli_fetch_object($stmt))
 						{
-							echo '<tr><td><h1>以下是尚未歸還之器材</h1></td></tr>';
-							while($result=mysqli_fetch_object($stmt))
-							{
-								echo '<tr><td>'.$result->equip_name.'</td><td>預借日期'.$result->lend_date.'，借'.$result->lend_days.'天</td></tr>';
-							}
-						}
-						$sql = "SELECT *
-							FROM classroom AS A1, lend_room AS A2
-							WHERE A1.room_ID = A2.room_ID AND A2.user_ID = '$temp'";
-						if($stmt = $db->query($sql))
-						{
-							echo '<tr><td><h1>以下是尚未歸還之教室</h1></td></tr>';
-							while($result2=mysqli_fetch_object($stmt))
-							{
-								echo '<tr><td>'.$result2->room_name.'</td><td>預借日期'.$result2->lend_date.'</td></tr>';
-							}
+							echo '<tr><td>'.$result->equip_name.'</td><td>預借日期'.$result->lend_date.'，借'.$result->lend_days.'天</td></tr>';
 						}
 					}
-					else
+					$sql = "SELECT * FROM classroom AS A1, lend_room AS A2 WHERE A1.room_ID = A2.room_ID AND A2.user_ID = '$user_ID'";
+					if(mysqli_query($db,$sql) != null)
 					{
-							echo '您無權限觀看此頁面!';
-							echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
+						$stmt = $db->query($sql);
+						echo '<tr><td><h1>以下是尚未歸還之教室</h1></td></tr>';
+						while($result2=mysqli_fetch_object($stmt))
+						{
+							echo '<tr><td>'.$result2->room_name.'</td><td>預借日期'.$result2->lend_date.'</td></tr>';
+						}
 					}
 				?>
 			</table>

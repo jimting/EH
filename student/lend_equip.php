@@ -7,7 +7,14 @@
 		<link rel="stylesheet" href="../css/bootstrap.min.css">
 		<script src="../js/jquery.js"></script>
 		<script src="../js/bootstrap.js"></script>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="/resources/demos/style.css">
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script src="./datepicker.js"></script>
+		<script src="./toastr.js"></script>
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="toastr.css" type="text/css" media="screen" />
 		<img src="./image/BigTitle.jpg" class="BigTitle" />
 		<nav class="navbar navbar-default" style="border-radius:10px;">
 			<div class="navbar-header">
@@ -57,52 +64,67 @@
 				</div>
 			</div>
 		</nav>
+		<?php
+			session_start();
+			include("mysqli_connect.inc.php");
+			$equip_ID = $_GET['equip_ID'];
+			$max = 0;
+		?>
+		<script>
+			var equip_ID = <?php echo $equip_ID;?>;
+			toastr.options = {
+				positionClass: 'toast-bottom-right',
+			}
+			$(document).ready(function()
+			{
+				$("#ajaxbutton").click(function()
+				{
+					$.post("lend_equip_finish.php",
+					{
+					  equip_ID:		equip_ID,
+					  howmany:		$('#howmany').val(),
+					  startdays:	$('#datepicker').val(),
+					  days:			$('#days').val()
+					},
+					function(result){
+						toastr.info('<strong>預借成功啦！</strong><br>可以到個人資訊確認<br>轉跳到器材清單！');
+						setTimeout("location.href='equipments.php'",3000);
+					});
+				});
+			});
+			
+		</script>
 	</head>
 	<body>
 		<div class="container">
-			<form method="post" action = "lend_equip_finish.php">
-				<div class="form-group">
-					<label for="equip">選擇器材:</label>
-					<select name="equip_ID">
+			<div class="form-group">
+				<label for="equip">選擇器材:</label>
 				  
 					<?php
-						session_start();
-						include("mysqli_connect.inc.php");
-						$sql = "SELECT * FROM equipment WHERE equip_ID = $equip_ID";
-						$stmt = $db->query($sql1);
-						$result1=mysqli_fetch_object($stmt);
-						$temp = 0;
 						if($_SESSION['user_number'] != null)
 						{
-							$sql = "SELECT * FROM equipment WHERE equip_quantity > 0";//所有可借器材及數量
-							if($stmt = $db->query($sql))
-							{
-								while($result=mysqli_fetch_object($stmt))
-								{	
-										echo "<option value=".$result->equip_ID.">".$result->equip_name."剩下".$result->equip_quantity."個</option>";
-										if($result->equip_quantity > $temp)//計算最大輸入限制
-											$temp = $result->equip_quantity;
-								}
-							echo '</select><br>
-							<input type="number" class="form-control" name="howmany" placeholder="要借幾個(請勿超出剩下數量)" max = "'.$temp.'" min = "0" />
-							<label for="equip">欲借日期:</label>
-							<input type="date" class="form-control" name="startdays" placeholder="輸入日期" >
-							<label for="equip">欲借天數:</label>
-						  <input type="text" class="form-control" name="days" placeholder="輸入天數">
-						
-						';
-							}
-						}	
-						else
+							$sql = "SELECT * FROM equipment WHERE equip_ID = '$equip_ID'";
+						if($stmt = $db->query($sql))
 						{
-							echo '你還沒登入';
-							echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
+							$result=mysqli_fetch_object($stmt);
+							echo "<h1>".$result->equip_name."剩下".$result->equip_quantity."個</h1>";
+							$max = $result->equip_quantity; //剩下多少個
+							echo '
+							<input type="number" class="form-control" id="howmany" placeholder="要借幾個" max = "'.$max.'" min = "0" />
+							<label for="equip">欲借日期:</label>
+							<input class="form-control" name="startdays" id="datepicker" placeholder="輸入日期">
+							<label for="equip">欲借天數:</label>
+							<input type="text" class="form-control" id="days" placeholder="輸入天數">';
 						}
-						
+					}	
+					else
+					{
+						echo '你還沒登入';
+						echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
+					}
 					?>
-				</div>
-				<button type="submit" class="btn btn-default">確認</button>
-			</form>
+			</div>
+			<button id="ajaxbutton" class="btn btn-default">確認</button>
 		</div>
 	</body>
 </html>

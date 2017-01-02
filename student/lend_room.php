@@ -7,6 +7,11 @@
 		<link rel="stylesheet" href="../css/bootstrap.min.css">
 		<script src="../js/jquery.js"></script>
 		<script src="../js/bootstrap.js"></script>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="/resources/demos/style.css">
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script src="./datepicker.js"></script>
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
 	</head>
 	<body>
@@ -62,22 +67,31 @@
 		<div class="container">
 			<form action='lend_classroom_action.php' method ='post'>
 				<div class="form-group">
-				<label for="classroom">選擇教室:</label>
-				<select name="classroom">
-				<?php
-					session_start();
-					include "mysqli_connect.inc.php";
-					$query = "SELECT * FROM classroom where room_status = 0";
-					if($stmt = $db->query($query))
-					{
-						while($result=mysqli_fetch_object($stmt))
-						{
-							echo "<option value=".$result->room_ID.">".$result->room_name."</option>";
-						}
-					}
-				?>
+					<label>預借日期:</label>
+					<input id="datepicker" class="form-control" name="startdays"/>
+					<label for="classroom">選擇教室:</label>
+					<select name="classroom">
+						<?php
+							include "mysqli_connect.inc.php";
+							$query = "SELECT * FROM classroom";
+							if($stmt = $db->query($query))
+							{
+								while($result=mysqli_fetch_object($stmt))
+								{
+									echo "<option value=".$result->room_ID.">".$result->room_name."</option>";
+								}
+							}
+						?>
+					</select><br>
+					<label for="time">預借時段:</label>
+					<select name="time">
+						<option value ="0">9~11</option>
+						<option value ="1">11~13</option>
+						<option value ="2">13~15</option>
+						<option value ="3">15~17</option>
+					</select><br>
 				</div>
-				<input type='submit' class='btn btn-default' value='Submit'>
+				<button type='submit' class='btn btn-default'>確認</button>
 			</form>
 		</div>
 	</body>
