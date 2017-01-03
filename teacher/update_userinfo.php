@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>課指組器管屋(´・ω・`)</title>
+		<title>課指組器管屋(´・ω・`)-更新個人資料</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="../css/bootstrap.min.css">

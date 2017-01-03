@@ -65,12 +65,8 @@
 					<?php
 					include("mysqli_connect.inc.php");
 
-					//此判斷為判定觀看此頁有沒有權限
-					//說不定是路人或不相關的使用者
-					//因此要給予排除
 					if($_SESSION['user_number'] != null)
 					{
-							//將資料庫裡的所有會員資料顯示在畫面上
 							$sql = "SELECT * FROM classroom";
 							if($stmt = $db->query($sql))
 							{
@@ -88,8 +84,8 @@
 											$result2 = mysqli_fetch_object($db->query($query));
 											echo "已借出</td><td>".$result2->user_department."</td>";
 										 }
-										 echo '<td><a href="update_classroom.html" class="btn btn-lg btn-default">編輯教室</a>
-										 <a href="update_classroom.html" class="btn btn-lg btn-default">刪除教室</a></td></tr>';
+										 echo '<td><a href="update_classroom.php?room_ID='.$result->room_ID.'"" class="btn btn-lg btn-default">編輯教室</a>
+										 <a href="delete_classroom_check.php?room_ID='.$result->room_ID.'" class="btn btn-lg btn-default">刪除教室</a></td></tr>';
 								}
 							}
 					}
