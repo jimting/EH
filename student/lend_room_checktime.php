@@ -15,6 +15,7 @@
 		<script src="./toastr.js"></script>
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="toastr.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="lend_room.css" type="text/css" media="screen" />
 		<img src="./image/BigTitle.jpg" class="BigTitle" />
 		<nav class="navbar navbar-default" style="border-radius:10px;">
 			<div class="navbar-header">
@@ -66,33 +67,35 @@
 		?>
 		<script>
 			var room_ID = <?php echo $room_ID;?>;
-			var max = 0;
+			
 			toastr.options = {
 				positionClass: 'toast-bottom-right',
 			}
 			$(document).ready(function()
 			{
-				$("#lendbutton").click(function()
-				{
-					if($('#howmany').val() <= max && $('#days').val() <= 7)
+				
+					$("#lendbutton").click(function()
 					{
-						$.post("lend_equip_finish.php",
+						if(typeof($('input[name=lend_time]:checked').val()) === "undefined")
 						{
-						  equip_ID:		equip_ID,
-						  howmany:		$('#howmany').val(),
-						  startdays:	$('#datepicker').val(),
-						  days:			$('#days').val()
-						},
-						function(result){
-							toastr.success('<strong>預借成功啦！</strong><br>可以到個人資訊確認<br>轉跳到器材清單！');
-							setTimeout("location.href='equipments.php'",2000);
-						});
-					}
-					else
-					{
-						toastr.warning('<strong>數量有誤！</strong><br>請再次確認預借數量與天數<br>不可超過指定數值！');
-					}
-				});
+							toastr.warning('<strong>請選擇時間！</strong><br>沒選時間怎麼借教室啦！');
+						}
+						else
+						{
+							$.post("lend_room_finish.php",
+							{
+								room_ID:	room_ID,
+								lend_date:	$('#lend_date').val(),
+								lend_time:	$('input[name=lend_time]:checked').val()
+							},
+							function(result)
+							{
+								toastr.success('<strong>預借成功啦！</strong><br>可以到個人資訊確認<br>轉跳到教室總表！');
+								setTimeout("location.href='classroom.php'",2000);
+							});
+						}
+					});
+				
 			});
 			
 		</script>
@@ -108,23 +111,32 @@
 							{
 								while($result = mysqli_fetch_object($stmt))
 								{
-									echo "<h1>您想借<strong>".$lend_date."</strong>的<strong>".$result->room_name."</strong></h1>";
+									echo "<h1>您想借<input type='text' id ='lend_date' disabled value ='".$lend_date."' />的<strong>".$result->room_name."</strong></h1>";
 									echo "<p>目前所剩時段有：(若無想借之時段請按上一頁選擇其他天！)</p>";
-									for($i = 0;$i < 4;$i++)
+									echo "<form name='checktime'><div class='radio'>";
+									for($temp = 0;$temp < 4;$temp++)
 									{
-										$sql2 = "SELECT * FROM lend_room WHERE room_ID = '$room_ID' AND lend_date = '$lend_date' AND lend_time = '$i'";
-										if(mysqli_query($db, $sql2) != null)
+										$sql2 = "SELECT * FROM lend_room WHERE room_ID = '$room_ID' AND lend_date = '$lend_date' AND lend_time = '$temp'";
+										if(mysqli_query($db, $sql2) == null)
 										{
-											
+											echo '<span class="time'.$temp.'"><label><input type="radio" name="lend_time" value="'.$temp.'">時段 '.$temp.'</label></span><br><br>';
 										}
 										else
 										{
-											if($stmt2 = $db->query($sql2))
+											if($stmt = $db->query($sql2))
 											{
-												if($result2 = mysqli_fetch_object($stmt2))
+												if($result2 = mysqli_fetch_object($stmt))
 												{
-													echo "test1";
+													
 												}
+												else
+												{
+													echo '<span class="time'.$temp.'"><label><input type="radio" name="lend_time" value="'.$temp.'">時段 '.$temp.'</label></span><br><br>';
+												}
+											}
+											else
+											{
+												echo '<span class="time'.$temp.'"><label><input type="radio" name="lend_time" value="'.$temp.'">時段 '.$temp.'</label></span><br><br>';
 											}
 										}
 									}
@@ -138,9 +150,12 @@
 							echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
 						}
 					?>
+					</div><br><br>
+					</form>
 			</div>
+			<br><br><br><br><br><br><br><br><br><br>
 			<a onclick=history.go(-1) class="btn btn-default">上一步</a>
-			<button id="ajaxbutton" class="btn btn-default" style="float:right;">確認</button>
+			<button id="lendbutton" class="btn btn-default" style="float:right;">確認預借</button>
 		</div>
 	</body>
 </html>
