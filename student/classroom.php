@@ -75,17 +75,19 @@
 
 				if($_SESSION['user_number'] != null)
 				{
-					$datetime = date ("Y-m-d" , mktime(date('m'), date('d'), date('Y'))) ; //取得今日時間
+					$today = date ("Y-m-d" , mktime(date('H')+8, date('i'), date('s'), date('m'), date('d'), date('Y'))) ; 
+					echo $today;
 					$sql = "SELECT * FROM classroom";
 					if($stmt = $db->query($sql))
 					{
 						while($result=mysqli_fetch_object($stmt))
 						{
 								echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td>";
-								for($i = 0;$i < 4;$i++)
+								for($temp = 0;$temp < 4;$temp++)
 								{
-									$sql2 = "SELECT * WHERE lend_time = '$i' IN(SELECT * FROM lend_room AS A,user AS B WHERE A.user_ID = B.user_ID AND A.room_ID = '$result->room_ID' AND lend_date = '$datetime')";
-									if(mysqli_query($db, $sql2) != null){
+									$sql2 = "SELECT * WHERE lend_time = '$temp' IN(SELECT * FROM lend_room left join user WHERE room_ID = '$result->room_ID' AND lend_date = '$today')";
+									if(mysqli_query($db, $sql2) != null)
+									{
 										if($stmt2 = $db->query($sql2))
 										{
 											if($result2 = mysqli_fetch_object($stmt2))

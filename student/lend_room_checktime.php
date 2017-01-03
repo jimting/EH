@@ -109,7 +109,7 @@
 								while($result = mysqli_fetch_object($stmt))
 								{
 									echo "<h1>您想借<strong>".$lend_date."</strong>的<strong>".$result->room_name."</strong></h1>";
-									echo "<p>目前所剩時段有：</p>";
+									echo "<p>目前所剩時段有：(若無想借之時段請按上一頁選擇其他天！)</p>";
 									for($i = 0;$i < 4;$i++)
 									{
 										$sql2 = "SELECT * FROM lend_room WHERE room_ID = '$room_ID' AND lend_date = '$lend_date' AND lend_time = '$i'";
@@ -125,7 +125,6 @@
 												{
 													echo "test1";
 												}
-													
 											}
 										}
 									}

@@ -1,33 +1,19 @@
 ﻿<?php
 
 include "mysqli_connect.inc.php";
-$room_name        =$_POST["room_name"];
+$room_ID=$_POST["room_ID"];
 
-$stmt = $db->prepare('Delete FROM classroom WHERE room_name=?');
-$stmt->bind_param('s',$room_name);
+$stmt = $db->prepare('Delete FROM classroom WHERE room_ID=?');
+$stmt->bind_param('s',$room_ID);
 $stmt->execute();
 
-
-echo "<table border='1'>
-<tr>
-<th>編號</th>
-<th>名稱</th>
-<th>狀態</th>
-<th>日期</th>
-</tr>";
-
-$query2="SELECT * FROM classroom";
-	if($stmt=$db->query($query2)){
-		while($result=mysqli_fetch_object($stmt)){
-		echo "<tr>";
-		echo "<td>".$result->room_ID."</td>";
-		echo "<td>".$result->room_name."</td>";
-		echo "<td>".$result->room_status."</td>";
-		echo "<td>".$result->room_date."</td>";
-		echo "<tr>";
-		}
+$sql = "SELECT * FROM lend_room WHERE room_ID = '$room_ID'";
+if($stmt = $db->query($sql))
+{
+	while($result = mysqli_fetch_object($stmt))
+	{
+		$sql2 = "DELETE FROM lend_room WHERE lend_room_ID = '$result->lend_room_ID'";
+		mysqli_query($db, $sql2);
 	}
-	
-	echo "</table>";
-
+}
 ?>
