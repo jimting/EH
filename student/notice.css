@@ -39,8 +39,7 @@
 }
 #abgne-block-20120327 .tab_container ul {
 	position: relative;
-	height: 150px;
-	overflow: hidden;
+	min-height: 300px;
 }
 #abgne-block-20120327 .tab_container .tab_content li {
 	position: absolute;
@@ -49,6 +48,7 @@
 	padding: 15px;
 	margin-top: 10px;
 	background: #fff;
+	overflow: auto;
 }
 #abgne-block-20120327 .tab_container .tab_content li img {
 	display: block;

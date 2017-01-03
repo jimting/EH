@@ -136,7 +136,7 @@
 										{
 											echo '
 											<tr>
-												<td>'.$result->lend_room_ID.'</td>
+												<td>'.$result->room_ID.'</td>
 												<td>'.$result->room_name.'</td>
 												<td>已借出</td>
 												<td>'.$result->lend_date.'</td>
