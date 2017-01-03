@@ -25,18 +25,12 @@
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
 					<li><a href="index.html">回首頁</a></li>
-					<li><a href="users.php">學生總表</a></li>
+					<li><a href="users.php">管理學生</a></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">器材教室區<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="equipments.php">器材使用列表</a></li>
 							<li><a href="classroom.php">教室使用列表</a></li>
-						</ul>
-					</li>
-					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還教室<span class="caret"></a>
-						<ul class="dropdown-menu">
-							<li><a href="lend_room.php">我要預借教室</a></li>
-							<li><a href="return_room.php">我要還器教室</a></li>
 						</ul>
 					</li>
 					<li class="active">
@@ -136,7 +130,7 @@
 										{
 											echo '
 											<tr>
-												<td>'.$result->lend_room_ID.'</td>
+												<td>'.$result->room_ID.'</td>
 												<td>'.$result->room_name.'</td>
 												<td>已借出</td>
 												<td>'.$result->lend_date.'</td>
