@@ -83,18 +83,26 @@
 						while($result=mysqli_fetch_object($stmt))
 						{
 								echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td>";
+								$room_ID = $result->room_ID;
 								for($temp = 0;$temp < 4;$temp++)
 								{
-									$sql2 = "SELECT * WHERE lend_time = '$temp' IN(SELECT * FROM lend_room left join user WHERE room_ID = '$result->room_ID' AND lend_date = '$today')";
+									$sql2 = "SELECT * FROM user WHERE user_ID = (SELECT user_ID FROM lend_room WHERE room_ID = '$room_ID' AND lend_date = '$today' AND lend_time = '$temp')";
 									if(mysqli_query($db, $sql2) != null)
 									{
 										if($stmt2 = $db->query($sql2))
 										{
 											if($result2 = mysqli_fetch_object($stmt2))
 											{
-												echo "<td>".$result2->user_department."</td>";
+												echo "<td><strong>".$result2->user_department."</strong><br>借用者學號：".$result2->user_number."</td>";
 											}
-												
+											else
+											{
+												echo "<td>未借出</td>";
+											}
+										}
+										else
+										{
+											echo "<td>未借出</td>";
 										}
 									}
 									else

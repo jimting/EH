@@ -1,0 +1,49 @@
+﻿.radio {
+	text-align: center;
+	font-size: 20px;
+	transition: all 0.5s;
+	cursor: pointer;
+	float:left;
+}
+
+.radio .time0:after 
+{
+  content: '\00bb 時段0為09:00~11:00';
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.radio .time1:after
+{
+  content: '\00bb 時段1為11:00~13:00';
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.radio .time2:after 
+{
+  content: '\00bb 時段2為13:00~15:00';
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.radio .time3:after
+{
+  content: '\00bb 時段3為15:00~17:00';
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.radio:hover span 
+{
+  padding-right: 25px;
+}
+.radio:hover span:after 
+{
+  opacity: 1;
+  right: 0;
+}
