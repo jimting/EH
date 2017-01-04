@@ -2,27 +2,29 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>課指組器管屋(´・ω・`)-更新個人資料</title>
+		<title>課指組器管屋(´・ω・`)</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="../css/bootstrap.min.css">
 		<script src="../js/jquery.js"></script>
 		<script src="../js/bootstrap.js"></script>
+		<script src="./toastr.js"></script>
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="toastr.css" type="text/css" media="screen" />
 		<img src="./image/BigTitle.jpg" class="BigTitle" />
 		<nav class="navbar navbar-default" style="border-radius:10px;">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>                        
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>                        
 				</button> 
 				<a class="navbar-brand" href="index.html">課指組器管屋(´・ω・`)</a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="index.html">回首頁</a></li>
-					<li><a href="users.php">管理學生</a></li>
+					<li><a href="index.html">回首頁</a></li>
+					<li><a href="users.php">學生總表</a></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">器材教室區<span class="caret"></span></a>
 						<ul class="dropdown-menu">
@@ -46,34 +48,65 @@
 				</div>
 			</div>
 		</nav>
+		<script>
+			toastr.options = {
+				positionClass: 'toast-bottom-right',
+			}
+			$(document).ready(function()
+			{
+				$("#updatebutton").click(function()
+				{
+					$.post("update_userinfo_finish.php",
+					{
+						user_number:		$('#user_number').val(),
+						user_pw:			$('#user_pw').val(),
+						user_pw2:			$('#user_pw2').val(),
+						user_nickname:		$('#user_nickname').val(),
+						user_email:			$('#user_email').val(),
+						user_department:	$('#user_department').val(),
+						user_phone:			$('#user_phone').val()
+					},
+					function(result){
+						toastr.success('<strong>修改成功啦！</strong><br>可以到個人資訊確認<br>轉跳到個人資訊！');
+						setTimeout("location.href='equipments.php'",2000);
+					});
+				});
+			});
+			
+		</script>
 	</head>
 	<body>
 		<div class="container">
-			<h1>您好！以下是你的個人資料！<a class="button" href="update_userinfo.php">編輯個人資訊</a></h1>       
+			<h1>您好！以下是你的個人資料！</h1>       
 			<table class="table table-hover">
 				<?php
 				include("mysqli_connect.inc.php");
 				
-				$temp = $_SESSION['user_ID'];
-				echo '<tr><td>你的學號：</td><td>'.$_SESSION['user_number'].'</td></tr><tr><td>你的暱稱：</td><td>'.$_SESSION['user_nickname'].'</td></tr><tr><td>你隸屬的社團：</td><td>'.$_SESSION['user_department'].'</td></tr><tr><td>帳號創建日期：</td><td>'.$_SESSION['user_date'].'</td></tr>';
-				$sql = "SELECT * FROM equipment AS A1, lend_equip AS A2 WHERE A1.equip_ID = A2.equip_ID AND A2.user_ID = '$temp'";
+				$user_ID = $_SESSION['user_ID'];
+				$CheckPassword = $_POST['CheckPassword'];
+				$sql = "SELECT * FROM user WHERE user_ID = '$user_ID'";
 				if($stmt = $db->query($sql))
 				{
-					if($result=mysqli_fetch_object($stmt))
-					echo '<tr><td><h1>以下是尚未歸還之器材</h1></td></tr>';
-					while($result=mysqli_fetch_object($stmt))
+					while($result = mysqli_fetch_object($stmt))
 					{
-					echo '<tr><td>'.$result->equip_name.'</td><td>預借日期'.$result->lend_date.'，借'.$result->lend_days.'天</td></tr>';
-					}
-				}
-				$sql = "SELECT * FROM classroom AS A1, lend_room AS A2 WHERE A1.room_ID = A2.room_ID AND A2.user_ID = '$temp'";
-				if($stmt = $db->query($sql))
-				{
-					if($result2=mysqli_fetch_object($stmt))
-					echo '<tr><td><h1>以下是尚未歸還之教室</h1></td></tr>';
-					while($result2=mysqli_fetch_object($stmt))
-					{
-						echo '<tr><td>'.$result2->room_name.'</td><td>預借日期'.$result2->lend_date.'</td></tr>';
+						if($user_ID == $result->user_ID)
+						{
+							echo '<form name="form" method="post" action="">';
+							echo '學號：<input type="text" class="form-control" id ="user_number" name="id" value="'.$result->user_number.'(此項目無法修改)" disabled /> <br>';
+							echo '密碼：<input type="password" class="form-control" id="user_pw" name="pw" value="'.$result->user_pw.'" /> <br>';
+							echo '再一次輸入密碼：<input type="password" class="form-control" id="user_pw2" name="pw2" value="'.$result->user_pw.'" /> <br>';
+							echo '暱稱：<input type="text" class="form-control" id="user_nickname" name="nickname" value="'.$result->user_nickname.'" /> <br>';
+							echo 'Email：<input type="text" class="form-control" name="email" id="user_email" value="'.$result->user_email.'" /> <br>';
+							echo '所屬社團/工作單位：<input type="text" class="form-control" id="user_department" name="department" value="'.$result->user_department.'"/> <br>';
+							echo '連絡電話：<input type="text" class="form-control" id="user_phone" name="phone" value="'.$result->user_phone.'"/> <br>';
+							echo '<a id="updatebutton" class="btn btn-default" name="button">確定修改</a>';
+						}
+						else
+						{
+							echo "<h1>密碼錯誤！請重新確認後再試一次！</h1>";
+							echo '<script>history.go(-1)</script>';
+							
+						}
 					}
 				}
 				?>

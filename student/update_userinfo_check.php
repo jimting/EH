@@ -30,12 +30,6 @@
 							<li><a href="classroom.php">教室使用列表</a></li>
 						</ul>
 					</li>
-					<li><a class="dropdown-toggle" data-toggle="dropdown" href="#">借還教室<span class="caret"></a>
-						<ul class="dropdown-menu">
-							<li><a href="lend_room.php">我要預借教室</a></li>
-							<li><a href="return_room.php">我要還教室</a></li>
-						</ul>
-					</li>
 					<li>
 						<a href='notice.php'>違規提醒專區</a>
 					</li>

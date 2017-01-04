@@ -13,16 +13,16 @@
 		<nav class="navbar navbar-default" style="border-radius:10px;">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>                        
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>                        
 				</button> 
 				<a class="navbar-brand" href="index.html">課指組器管屋(´・ω・`)</a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="index.html">回首頁</a></li>
-					<li><a href="users.php">管理學生</a></li>
+					<li><a href="index.html">回首頁</a></li>
+					<li><a href="users.php">學生總表</a></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">器材教室區<span class="caret"></span></a>
 						<ul class="dropdown-menu">

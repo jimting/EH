@@ -69,7 +69,6 @@
 						echo 'Email：<input type="text" class="form-control" name="email" value="'.$result->user_email.'" /> <br>';
 						echo '所屬社團/工作單位：<input type="text" class="form-control" name="department" value="'.$result->user_department.'"/> <br>';
 						echo '連絡電話：<input type="text" class="form-control" name="phone" value="'.$result->user_phone.'"/> <br>';
-						echo '等級：<input type="text" class="form-control" name="phone" value="'.$result->user_level.'"/> <br>';
 						echo '<input type="submit" name="button" value="確定修改" />';
 						echo '</form>';
 				}
