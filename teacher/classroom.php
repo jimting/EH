@@ -49,51 +49,73 @@
 	</head>
 	<body>
 		<div class="container">
-			<p>以下是教室各項資料與狀態: </p>        
+			<p>以下是教室今日使用狀態：</p>            
 			<table class="table table-hover">
 				<thead>
 					<tr>			
 						<th>教室編號</th>
 						<th>教室名稱</th>
-						<th>現在借出狀態</th>
-						<th>現在使用社團</th>
+						<th>09:00~11:00</th>
+						<th>11:00~13:00</th>
+						<th>13:00~15:00</th>
+						<th>15:00~17:00</th>
 						<th><a href="new_classroom.html" class="btn btn-lg btn-default">新增教室</a></th>
 					</tr>
 				</thead>
 				<tbody>
 				
 					<?php
-					include("mysqli_connect.inc.php");
+						include("mysqli_connect.inc.php");
 
-					if($_SESSION['user_number'] != null)
-					{
+						if($_SESSION['user_number'] != null)
+						{
+							$today = date ("Y-m-d" , mktime(date('H')+8, date('i'), date('s'), date('m'), date('d'), date('Y'))) ; 
+							echo $today;
 							$sql = "SELECT * FROM classroom";
 							if($stmt = $db->query($sql))
 							{
 								while($result=mysqli_fetch_object($stmt))
 								{
-										 echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td><td>";
-										 if($result->room_status == 0)
-										 {
-											echo "未借出</td><td></td>";
-										 }
-										 else
-										 {
-											$temp = $result->room_ID;
-											$query = "SELECT * FROM lend_room NATURAL JOIN user WHERE room_ID = '$temp'";
-											$result2 = mysqli_fetch_object($db->query($query));
-											echo "已借出</td><td>".$result2->user_department."</td>";
-										 }
-										 echo '<td><a href="update_classroom.php?room_ID='.$result->room_ID.'"" class="btn btn-lg btn-default">編輯教室</a>
+										echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td>";
+										$room_ID = $result->room_ID;
+										for($temp = 0;$temp < 4;$temp++)
+										{
+											$sql2 = "SELECT * FROM user WHERE user_ID = (SELECT user_ID FROM lend_room WHERE room_ID = '$room_ID' AND lend_date = '$today' AND lend_time = '$temp')";
+											if(mysqli_query($db, $sql2) != null)
+											{
+												if($stmt2 = $db->query($sql2))
+												{
+													if($result2 = mysqli_fetch_object($stmt2))
+													{
+														echo "<td><strong>".$result2->user_department."</strong><br>借用者學號：".$result2->user_number."</td>";
+													}
+													else
+													{
+														echo "<td>未借出</td>";
+													}
+												}
+												else
+												{
+													echo "<td>未借出</td>";
+												}
+											}
+											else
+											{
+												echo "<td>未借出</td>";
+											}
+										}
+										echo '<td><a href="update_classroom.php?room_ID='.$result->room_ID.'"" class="btn btn-lg btn-default">編輯教室</a>
 										 <a href="delete_classroom_check.php?room_ID='.$result->room_ID.'" class="btn btn-lg btn-default">刪除教室</a></td></tr>';
+										echo "</tr>";
+											 
 								}
 							}
-					}
-					else
-					{
-							echo '您無權限觀看此頁面!';
-							echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
-					}
+						}
+						else
+						{
+								echo '您無權限觀看此頁面!';
+								echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
+						}
 					?>
 				  
 				</tbody>
