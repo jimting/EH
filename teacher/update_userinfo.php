@@ -83,12 +83,13 @@
 				include("mysqli_connect.inc.php");
 				
 				$user_ID = $_SESSION['user_ID'];
+				$CheckPassword = $_POST['CheckPassword'];
 				$sql = "SELECT * FROM user WHERE user_ID = '$user_ID'";
 				if($stmt = $db->query($sql))
 				{
 					while($result = mysqli_fetch_object($stmt))
 					{
-						if($user_ID == $result->user_ID)
+						if($user_ID == $result->user_ID && $CheckPassword == $result->user_pw)
 						{
 							echo '學號：<input type="text" class="form-control" id ="user_number" value="'.$result->user_number.'(此項目無法修改)" disabled /> <br>';
 							echo '密碼：<input type="password" class="form-control" id="user_pw" value="'.$result->user_pw.'" /> <br>';
@@ -102,7 +103,7 @@
 						else
 						{
 							echo "<h1>密碼錯誤！請重新確認後再試一次！</h1>";
-							echo '<script>history.go(-1)</script>';
+							echo '<script>setTimeout("history.go(-1)",2000);</script>';
 							
 						}
 					}
