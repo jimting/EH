@@ -1,18 +1,46 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>課指組器管屋(´・ω・`)-預借教室-選擇日期</title>
+		<title>課指組器管屋(´・ω・`)-歸還器材</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="../css/bootstrap.min.css">
 		<script src="../js/jquery.js"></script>
 		<script src="../js/bootstrap.js"></script>
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-		<link rel="stylesheet" href="/resources/demos/style.css">
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		<script src="./datepicker.js"></script>
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="toastr.css" type="text/css" media="screen" />
+		<script src="./toastr.js"></script>
+		
+		<?php
+			session_start();
+			include("mysqli_connect.inc.php");
+			$user_ID = $_SESSION['user_ID'];//使用者
+			$lend_room_ID = $_GET['lend_room_ID'];
+			$lend_time = $_GET['lend_time'];
+		?>
+		<script>
+			var lend_room_ID = <?php echo $lend_room_ID; ?>;
+			var lend_time = <?php echo $lend_time; ?>;
+			toastr.options = {
+				positionClass: 'toast-bottom-right',
+			}
+			$(document).ready(function()
+			{
+				$("#returnbutton").click(function()
+				{
+					$.post("return_classroom_finish.php",
+					{
+					  lend_room_ID: lend_room_ID,
+					  lend_time:	lend_time
+					},
+					function(result)
+					{
+						toastr.success('<strong>歸還成功啦！</strong><br>可以到個人資訊確認<br>轉跳到個人資訊！');
+						setTimeout("location.href='userinfo.php'",2000);
+					});
+				});
+			});
+		</script>
 	</head>
 	<body>
 		<img src="./image/BigTitle.jpg" class="BigTitle" />
@@ -27,7 +55,7 @@
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
-					<li><a href="index.html">回首頁</a></li>
+					<li class="active"><a href="index.html">回首頁</a></li>
 					<li><a href="users.php">學生總表</a></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">器材教室區<span class="caret"></span></a>
@@ -53,29 +81,19 @@
 			</div>
 		</nav>
 		<div class="container">
-		
-					<?php
-						include "mysqli_connect.inc.php";
-							
-						$room_ID = $_GET['room_ID'];
-						$query = "SELECT * FROM classroom WHERE room_ID = '$room_ID'";
-						
-						echo "<form action='lend_room_checktime.php?room_ID=".$room_ID."' method ='post'>
-								<div class='form-group'>";
-						if($stmt = $db->query($query))
+			<div class="form-group">
+				<?php
+					$sql = "SELECT * FROM classroom AS A1, lend_room AS A2 WHERE A1.room_ID = A2.room_ID AND A2.lend_room_ID = '$lend_room_ID'";
+					if($stmt = $db->query($sql))
+					{
+						while($result=mysqli_fetch_object($stmt))
 						{
-							while($result=mysqli_fetch_object($stmt))
-							{
-								echo "<h1>您想預借<strong>".$result->room_name."<strong></h1>";
-							}
+							echo "<h1>歸還<strong>".$result->room_name."</strong>，借的時段是".$result->lend_date."的時段".$result->lend_time."</h1>";
 						}
-					?>
-					<label>預借日期:</label>
-					<input id="datepicker" class="form-control" name="lend_date"/>
-						
-				</div>
-				<button type='submit' class='btn btn-default' style="float:right;">下一步</button>
-			</form>
+					}
+				?>
+				<a id='returnbutton' class='btn btn-lg btn-default'>確定歸還</a>
+			</div>
 		</div>
 	</body>
 </html>

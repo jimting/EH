@@ -13,16 +13,16 @@
 		<nav class="navbar navbar-default" style="border-radius:10px;">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>                        
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>                        
 				</button> 
 				<a class="navbar-brand" href="index.html">課指組器管屋(´・ω・`)</a>
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="index.html">回首頁</a></li>
-					<li><a href="users.php">管理學生</a></li>
+					<li><a href="index.html">回首頁</a></li>
+					<li><a href="users.php">學生總表</a></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">器材教室區<span class="caret"></span></a>
 						<ul class="dropdown-menu">
@@ -55,7 +55,7 @@
 					$user_ID = $_SESSION['user_ID'];
 					$user_name = $_SESSION['user_nickname'];
 					echo '<h1><strong>'.$user_name.'</strong>您好！以下是你的個人資料！<a class="button" href="update_userinfo_check.php">點我編輯個人資訊</a></h1>';
-					echo '<tr><td>你的學號：</td><td>'.$_SESSION['user_number'].'</td></tr><tr><td>你的暱稱：</td><td>'.$_SESSION['user_nickname'].'</td></tr><tr><td>你隸屬的社團：</td><td>'.$_SESSION['user_department'].'</td></tr><tr><td>帳號創建日期：</td><td>'.$_SESSION['user_date'].'</td></tr>';
+					echo '<tr><td>你的學號：</td><td>'.$_SESSION['user_number'].'</td></tr><tr><td>你的暱稱：</td><td>'.$_SESSION['user_nickname'].'</td></tr><tr><td>你隸屬的社團：</td><td>'.$_SESSION['user_department'].'</td></tr><tr><td>帳號創建日期：</td><td>'.$_SESSION['user_date'].'</td></tr><tr><td>你的email</td><td>'.$_SESSION['user_email'].'</td></tr>';
 					
 					$sql = "SELECT * FROM equipment AS A1, lend_equip AS A2 WHERE A1.equip_ID = A2.equip_ID AND A2.user_ID = '$user_ID'";
 					if($stmt = $db->query($sql))
@@ -64,17 +64,17 @@
 						echo '<tr><td><h1>以下是尚未歸還之器材</h1></td></tr>';
 						while($result=mysqli_fetch_object($stmt))
 						{
-							echo '<tr><td>'.$result->equip_name.'</td><td>預借日期'.$result->lend_date.'，借'.$result->lend_days.'天</td></tr>';
+							echo '<tr><td>'.$result->equip_name.'</td><td>預借日期'.$result->lend_date.'，借'.$result->lend_days.'天</td><td>借了'.$result->lend_equip_quan.'個</td><td><a href="return_equip_check.php?lend_equip_ID='.$result->lend_equip_ID.'" class="btn btn-lg btn-default">歸還器材</a></td></tr>';
 						}
 					}
 					$sql = "SELECT * FROM classroom AS A1, lend_room AS A2 WHERE A1.room_ID = A2.room_ID AND A2.user_ID = '$user_ID'";
-					if($stmt = $db->query($sql))
+					if(mysqli_query($db,$sql) != null)
 					{
-						if($result2=mysqli_fetch_object($stmt))
+						$stmt = $db->query($sql);
 						echo '<tr><td><h1>以下是尚未歸還之教室</h1></td></tr>';
 						while($result2=mysqli_fetch_object($stmt))
 						{
-							echo '<tr><td>'.$result2->room_name.'</td><td>預借日期'.$result2->lend_date.'</td></tr>';
+							echo '<tr><td>'.$result2->room_name.'</td><td>預借日期'.$result2->lend_date.'</td><td>出借時段'.$result2->lend_time.'</td><td><a href="return_classroom_check.php?lend_room_ID='.$result2->lend_room_ID.'&lend_time='.$result2->lend_time.'" class="btn btn-lg btn-default">歸還教室</a></td></tr>';
 						}
 					}
 				?>

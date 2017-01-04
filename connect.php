@@ -30,6 +30,7 @@
 				$_SESSION['user_date'] = $result->user_date;
 				$_SESSION['user_ID'] = $result->user_ID;
 				$_SESSION['user_level'] = $result->user_level;
+				$_SESSION['user_email'] = $result->user_email;
 				
 				//user_number, user_pw,user_nickname,user_email,user_department,user_phone,user_date
 				echo '<div class="login"><h1>登入成功囉！<h1><br><h1>前進首頁！</h1></div>';
