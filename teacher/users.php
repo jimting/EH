@@ -80,7 +80,7 @@
 							{
 								while($result=mysqli_fetch_object($stmt))
 								{
-										 echo "<tr><td>".$result->user_department."</td><td>".$result->user_nickname."</td><td>".$result->user_number."</td><td>".$result->user_pw."</td><td>".$result->user_email."</td><td>".$result->user_phone."</td><td>".$result->user_level."</td><td>".$result->user_date."</td><td><a href='delete_user_check.php?id=".$result->user_ID."' class='btn btn-lg btn-default'>刪除學生</a><a href='update_user.php?id=".$result->user_ID."' class='btn btn-lg btn-default'>編輯學生</a></td></tr>";
+										 echo "<tr><td>".$result->user_department."</td><td>".$result->user_nickname."</td><td>".$result->user_number."</td><td>".$result->user_pw."</td><td>".$result->user_email."</td><td>".$result->user_phone."</td><td>".$result->user_level."</td><td>".$result->user_date."</td><td><a href='delete_user_check.php?user_ID=".$result->user_ID."' class='btn btn-lg btn-default'>刪除學生</a><a href='update_user.php?user_ID=".$result->user_ID."' class='btn btn-lg btn-default'>編輯學生</a></td></tr>";
 								}
 							}
 					}

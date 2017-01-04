@@ -2,13 +2,15 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>課指組器管屋(´・ω・`)-更新學生資料</title>
+		<title>課指組器管屋(´・ω・`)</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="../css/bootstrap.min.css">
 		<script src="../js/jquery.js"></script>
 		<script src="../js/bootstrap.js"></script>
+		<script src="./toastr.js"></script>
 		<link rel="stylesheet" href="Style.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="toastr.css" type="text/css" media="screen" />
 		<img src="./image/BigTitle.jpg" class="BigTitle" />
 		<nav class="navbar navbar-default" style="border-radius:10px;">
 			<div class="navbar-header">
@@ -22,7 +24,7 @@
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
 					<li><a href="index.html">回首頁</a></li>
-					<li class="active"><a href="users.php">管理學生</a></li>
+					<li><a href="users.php">管理學生</a></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">器材教室區<span class="caret"></span></a>
 						<ul class="dropdown-menu">
@@ -46,38 +48,65 @@
 				</div>
 			</div>
 		</nav>
+		<?php
+		include("mysqli_connect.inc.php");
+				
+			$user_ID = $_GET['user_ID'];
+				
+		?>
+		<script>
+			var user_ID = <?php echo $user_ID; ?>;
+			toastr.options = {
+				positionClass: 'toast-bottom-right',
+			}
+			$(document).ready(function()
+			{
+				$("#updatebutton").click(function()
+				{
+					$.post("update_user_finish.php",
+					{
+						user_ID:			user_ID,
+						user_pw:			$('#user_pw').val(),
+						user_pw2:			$('#user_pw2').val(),
+						user_nickname:		$('#user_nickname').val(),
+						user_email:			$('#user_email').val(),
+						user_department:	$('#user_department').val(),
+						user_phone:			$('#user_phone').val(),
+						user_level:			$('#user_level').val()
+					},
+					function(result){
+						toastr.success('<strong>修改成功啦！</strong><br>可以到管理學生清單確認<br>轉跳到管理學生清單！');
+						setTimeout("location.href='users.php'",2000);
+					});
+				});
+			});
+			
+		</script>
 	</head>
 	<body>
 		<div class="container">
-			<?php
-				include('mysqli_connect.inc.php');
-				if($_SESSION['user_number'] != null)
+			<h1>您好！以下是你的個人資料！</h1>       
+			<table class="table table-hover">
+				<?php
+				
+				$sql = "SELECT * FROM user WHERE user_ID = '$user_ID'";
+				if($stmt = $db->query($sql))
 				{
-						//將$_SESSION['id']丟給$id
-						//這樣在下SQL語法時才可以給搜尋的值
-						$id = $_GET['id'];
-						//若以下$id直接用$_SESSION['username']將無法使用
-						$sql = "SELECT * FROM user where user_id = '$id'";
-						$stmt = $db->query($sql);
-						$result=mysqli_fetch_object($stmt);
-					
-						echo '<form name="form" method="post" action="update_user_finish.php">';
-						echo '學號：<input type="text" class="form-control" name="id" value="'.$result->user_number.'(此項目無法修改)" disabled /> <br>';
-						echo '密碼：<input type="text" class="form-control" name="pw" value="'.$result->user_pw.'" /> <br>';
-						echo '再一次輸入密碼：<input type="text" class="form-control" name="pw2" value="'.$result->user_pw.'" /> <br>';
-						echo '暱稱：<input type="text" class="form-control" name="nickname" value="'.$result->user_nickname.'" /> <br>';
-						echo 'Email：<input type="text" class="form-control" name="email" value="'.$result->user_email.'" /> <br>';
-						echo '所屬社團/工作單位：<input type="text" class="form-control" name="department" value="'.$result->user_department.'"/> <br>';
-						echo '連絡電話：<input type="text" class="form-control" name="phone" value="'.$result->user_phone.'"/> <br>';
-						echo '<input type="submit" name="button" value="確定修改" />';
-						echo '</form>';
+					while($result = mysqli_fetch_object($stmt))
+					{
+						echo '學號：<input type="text" class="form-control" id ="user_number" value="'.$result->user_number.'(此項目無法修改)" disabled /> <br>';
+						echo '密碼：<input type="text" class="form-control" id="user_pw" value="'.$result->user_pw.'" /> <br>';
+						echo '再一次輸入密碼：<input type="text" class="form-control" id="user_pw2" value="'.$result->user_pw.'" /> <br>';
+						echo '暱稱：<input type="text" class="form-control" id="user_nickname" value="'.$result->user_nickname.'" /> <br>';
+						echo 'Email：<input type="text" class="form-control"  id="user_email" value="'.$result->user_email.'" /> <br>';
+						echo '所屬社團/工作單位：<input type="text" class="form-control" id="user_department" value="'.$result->user_department.'"/> <br>';
+						echo '連絡電話：<input type="text" class="form-control" id="user_phone" value="'.$result->user_phone.'"/> <br>';
+						echo '使用者權限：<input type="text" class="form-control" id="user_level" value="'.$result->user_level.'"/> <br>';
+						echo '<a id="updatebutton" class="btn btn-default" name="button">確定修改</a>';
+					}
 				}
-				else
-				{
-						echo '您無權限觀看此頁面!';
-						echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
-				}
-			?>
+				?>
+			</table>
 		</div>
 	</body>
 </html>

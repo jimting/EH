@@ -68,7 +68,7 @@
 					},
 					function(result){
 						toastr.success('<strong>修改成功啦！</strong><br>可以到個人資訊確認<br>轉跳到個人資訊！');
-						setTimeout("location.href='equipments.php'",2000);
+						setTimeout("location.href='userinfo.php'",2000);
 					});
 				});
 			});
@@ -92,13 +92,13 @@
 						if($user_ID == $result->user_ID)
 						{
 							echo '<form name="form" method="post" action="">';
-							echo '學號：<input type="text" class="form-control" id ="user_number" name="id" value="'.$result->user_number.'(此項目無法修改)" disabled /> <br>';
-							echo '密碼：<input type="password" class="form-control" id="user_pw" name="pw" value="'.$result->user_pw.'" /> <br>';
-							echo '再一次輸入密碼：<input type="password" class="form-control" id="user_pw2" name="pw2" value="'.$result->user_pw.'" /> <br>';
-							echo '暱稱：<input type="text" class="form-control" id="user_nickname" name="nickname" value="'.$result->user_nickname.'" /> <br>';
-							echo 'Email：<input type="text" class="form-control" name="email" id="user_email" value="'.$result->user_email.'" /> <br>';
-							echo '所屬社團/工作單位：<input type="text" class="form-control" id="user_department" name="department" value="'.$result->user_department.'"/> <br>';
-							echo '連絡電話：<input type="text" class="form-control" id="user_phone" name="phone" value="'.$result->user_phone.'"/> <br>';
+							echo '學號：<input type="text" class="form-control" id ="user_number" value="'.$result->user_number.'(此項目無法修改)" disabled /> <br>';
+							echo '密碼：<input type="password" class="form-control" id="user_pw" value="'.$result->user_pw.'" /> <br>';
+							echo '再一次輸入密碼：<input type="password" class="form-control" id="user_pw2" value="'.$result->user_pw.'" /> <br>';
+							echo '暱稱：<input type="text" class="form-control" id="user_nickname" value="'.$result->user_nickname.'" /> <br>';
+							echo 'Email：<input type="text" class="form-control"  id="user_email" value="'.$result->user_email.'" /> <br>';
+							echo '所屬社團/工作單位：<input type="text" class="form-control" id="user_department" value="'.$result->user_department.'"/> <br>';
+							echo '連絡電話：<input type="text" class="form-control" id="user_phone" value="'.$result->user_phone.'"/> <br>';
 							echo '<a id="updatebutton" class="btn btn-default" name="button">確定修改</a>';
 						}
 						else

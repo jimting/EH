@@ -7,7 +7,7 @@ $id = $_GET['id'];
 if($_SESSION['user_number'] != null)
 {
         //刪除資料庫資料語法
-        $sql = "delete from user where user_number='$id'";
+        $sql = "delete from user where user_id='$id'";
         if(mysqli_query($db,$sql))
         {
                 echo '<meta http-equiv=REFRESH CONTENT=0;url=users.php>';

@@ -49,45 +49,50 @@
 	</nav>
 	<div class="container">
 		<p>以下是教室今日使用狀態：</p>            
-	  <table class="table table-hover">
-		<thead>
-			<tr>			
-				<th>教室編號</th>
-				<th>教室名稱</th>
-				<th>09:00~11:00</th>
-				<th>11:00~13:00</th>
-				<th>13:00~15:00</th>
-				<th>15:00~17:00</th>
-				<th> </th>
-			</tr>
-		</thead>
-		<tbody>
-		
-			<?php
-				session_start();
-				include("mysqli_connect.inc.php");
+		<table class="table table-hover">
+			<thead>
+				<tr>			
+					<th>教室編號</th>
+					<th>教室名稱</th>
+					<th>09:00~11:00</th>
+					<th>11:00~13:00</th>
+					<th>13:00~15:00</th>
+					<th>15:00~17:00</th>
+					<th> </th>
+				</tr>
+			</thead>
+			<tbody>
+			
+				<?php
+					session_start();
+					include("mysqli_connect.inc.php");
 
-				if($_SESSION['user_number'] != null)
-				{
-					$today = date ("Y-m-d" , mktime(date('H')+8, date('i'), date('s'), date('m'), date('d'), date('Y'))) ; 
-					echo $today;
-					$sql = "SELECT * FROM classroom";
-					if($stmt = $db->query($sql))
+					if($_SESSION['user_number'] != null)
 					{
-						while($result=mysqli_fetch_object($stmt))
+						$today = date ("Y-m-d" , mktime(date('H')+8, date('i'), date('s'), date('m'), date('d'), date('Y'))) ; 
+						echo $today;
+						$sql = "SELECT * FROM classroom";
+						if($stmt = $db->query($sql))
 						{
-								echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td>";
-								$room_ID = $result->room_ID;
-								for($temp = 0;$temp < 4;$temp++)
-								{
-									$sql2 = "SELECT * FROM user WHERE user_ID = (SELECT user_ID FROM lend_room WHERE room_ID = '$room_ID' AND lend_date = '$today' AND lend_time = '$temp')";
-									if(mysqli_query($db, $sql2) != null)
+							while($result=mysqli_fetch_object($stmt))
+							{
+									echo "<tr><td>".$result->room_ID."</td><td>".$result->room_name."</td>";
+									$room_ID = $result->room_ID;
+									for($temp = 0;$temp < 4;$temp++)
 									{
-										if($stmt2 = $db->query($sql2))
+										$sql2 = "SELECT * FROM user WHERE user_ID = (SELECT user_ID FROM lend_room WHERE room_ID = '$room_ID' AND lend_date = '$today' AND lend_time = '$temp')";
+										if(mysqli_query($db, $sql2) != null)
 										{
-											if($result2 = mysqli_fetch_object($stmt2))
+											if($stmt2 = $db->query($sql2))
 											{
-												echo "<td><strong>".$result2->user_department."</strong><br>借用者學號：".$result2->user_number."</td>";
+												if($result2 = mysqli_fetch_object($stmt2))
+												{
+													echo "<td><strong>".$result2->user_department."</strong><br>借用者學號：".$result2->user_number."</td>";
+												}
+												else
+												{
+													echo "<td>未借出</td>";
+												}
 											}
 											else
 											{
@@ -99,26 +104,21 @@
 											echo "<td>未借出</td>";
 										}
 									}
-									else
-									{
-										echo "<td>未借出</td>";
-									}
-								}
-								echo "<td><a href='lend_room_checkdate.php?room_ID=".$result->room_ID."' class='btn btn-lg btn-default'>我想預借</a></td>";
-								echo "</tr>";
-									 
+									echo "<td><a href='lend_room_checkdate.php?room_ID=".$result->room_ID."' class='btn btn-lg btn-default'>我想預借</a></td>";
+									echo "</tr>";
+										 
+							}
 						}
 					}
-				}
-				else
-				{
-						echo '您無權限觀看此頁面!';
-						echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
-				}
-			?>
-		  
-		</tbody>
-	  </table>
+					else
+					{
+							echo '您無權限觀看此頁面!';
+							echo '<meta http-equiv=REFRESH CONTENT=2;url=login.html>';
+					}
+				?>
+			  
+			</tbody>
+		</table>
 	</div>
 	</body>
 </html>

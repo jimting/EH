@@ -12,6 +12,15 @@
 	}
 	else
 	{
-		echo '<span class="info">您好！<span class="usernickname">'.$_SESSION['user_nickname'].'</span><br><a href="userinfo.php" class="ToUserinfo" target="_parent">→點我進入個人資訊</a></span>';
+		$user_ID = $_SESSION['user_ID'];
+		$sql = "SELECT * FROM user WHERE user_ID = '$user_ID'";
+		if($stmt = $db->query($sql))
+		{
+			while($result = mysqli_fetch_object($stmt))
+			{
+				echo '<span class="info">您好！<span class="usernickname">'.$result->user_nickname.'</span><br><a href="userinfo.php" class="ToUserinfo" target="_parent">→點我進入個人資訊</a></span>';
+			}
+			
+		}
 	}
 ?>

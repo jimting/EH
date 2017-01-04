@@ -3,33 +3,15 @@
 <?php
 include("mysqli_connect.inc.php");
 
-$id = $_POST['id'];
-$pw = $_POST['pw'];
-$pw2 = $_POST['pw2'];
-$phone = $_POST['phone'];
-$nickname = $_POST['nickname'];
-$email = $_POST['email'];
-$department = $_POST['department'];
+$user_ID = $_POST['user_ID'];
+$user_pw = $_POST['user_pw'];
+$user_pw2 = $_POST['user_pw2'];
+$user_nickname = $_POST['user_nickname'];
+$user_email = $_POST['user_email'];
+$user_department = $_POST['user_department'];
+$user_phone = $_POST['user_phone'];
+$user_level = $_POST['user_level'];
 
-//紅色字體為判斷密碼是否填寫正確
-if($_SESSION['user_number'] != null && $pw != null && $pw2 != null && $pw == $pw2)
-{
-        $id = $_SESSION['user_number'];
-    
-        //更新資料庫資料語法
-        $sql = "update user set user_pw='$pw', user_phone='$phone', user_email='$email', user_department='$department', user_nickname='$nickname' where user_number='$id'";
-        if(mysqli_query($db,$sql))
-        {
-                echo '<meta http-equiv=REFRESH CONTENT=0;url=users.php>';
-        }
-        else
-        {
-                echo '<meta http-equiv=REFRESH CONTENT=0;url=users.php>';
-        }
-}
-else
-{
-        echo '您無權限觀看此頁面!';
-        echo '<meta http-equiv=REFRESH CONTENT=2;url=../login.html>';
-}
+$sql = "UPDATE user SET user_pw='$user_pw', user_nickname='$user_nickname', user_email='$user_email', user_phone='$user_phone', user_department='$user_department', user_level='$user_level' WHERE user_ID='$user_ID'";
+mysqli_query($db,$sql);
 ?>
